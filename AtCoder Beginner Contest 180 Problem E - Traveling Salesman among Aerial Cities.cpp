@@ -31,8 +31,8 @@ int main() {
       if ( (d & (1<<j)) ){
         for (int k=0;k<n;k++){
           if ( (d & (1<<k)) ){
-            dis=abs(x[j]-x[k])+abs(y[j]-y[k])+max(0,z[j]-z[k]);
-            dp[j][d]=min(dp[j][d],dp[k][d^(1<<j)]+dis);
+            dis=abs(x[j]-x[k])+abs(y[j]-y[k])+max(0,z[k]-z[j]);
+            dp[k][d]=min(dp[k][d],dp[j][d^(1<<k)]+dis);
           }
         }
       }
