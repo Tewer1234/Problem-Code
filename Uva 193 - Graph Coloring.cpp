@@ -12,23 +12,17 @@
 using namespace std;
 typedef pair<int,int> pp;
 map <int,int> mp;
-vector <int> nodes[100000];
-int used[100000],blacked[100000],check[100000],ans;
+vector <int> nodes[100000],blacked,check;
+int used[100000],ans;
 void dfs(int n,int N){
   int nxt,flag;
   // cout<<n<<": ";
   // for (int i=1;i<=N;i++) cout<<check[i]<<" ";
   // cout<<"\n";
   if (n>N){
-    int temp=0;
-    for (int i=1;i<=N;i++){
-      if (blacked[i]) temp++;
-    }
+    int temp=blacked.size();
     if (temp>ans){
-      for (int i=1;i<=N;i++){
-        if (blacked[i]) check[i]=1;
-        else check[i]=0;
-      }
+      check=blacked;
       ans=temp;
     }
     return;
@@ -37,17 +31,19 @@ void dfs(int n,int N){
   flag=1;
   for (int i=0;i<nodes[n].size();i++){
     nxt=nodes[n][i];
-    if (blacked[nxt]){
+    if (used[nxt]){
       flag=0;
       break;
     }
   }
   if (flag){
-    blacked[n]=1;
+    used[n]=1;
+    blacked.pb(n);
     // for (int i=1;i<=N;i++) cout<<check[i]<<" ";
     // cout<<"\n"; 
     dfs(n+1,N);
-    blacked[n]=0;
+    blacked.pop_back();
+    used[n]=0;
   }
   dfs(n+1,N);
   
@@ -60,9 +56,9 @@ int main() {
   while (t--){
     cin>>n>>k;
     ans=temp=0;
-    mp.clear();
+    blacked.clear();
+    check.clear();
     memset(used,0,sizeof(used));
-    memset(check,0,sizeof(check));
     for (int i=1;i<=n;i++){
       nodes[i].clear();
     }
@@ -73,15 +69,11 @@ int main() {
     }
     dfs(1,n);
     cout<<ans<<"\n";
-    for (int i=1;i<=n;i++){
-      if (check[i]){
-        cout<<i;
-        temp++;
-        if (temp<ans) cout<<" ";
-      }
+    for (int i=0;i<check.size();i++){
+      cout<<check[i];
+      if (i!=check.size()-1) cout<<" ";
     }
     cout<<"\n";
   }
   return 0;
 }
-
